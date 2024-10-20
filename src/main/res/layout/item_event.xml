@@ -15,7 +15,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp" >
+        android:padding="4dp" >
 
         <ImageView
             android:id="@+id/iv_event"
@@ -35,6 +35,8 @@
             android:layout_toEndOf="@id/iv_event"
             android:textSize="16sp"
             android:textStyle="bold"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintStart_toEndOf="@id/iv_event"
             card_view:layout_constraintTop_toTopOf="@id/iv_event"
