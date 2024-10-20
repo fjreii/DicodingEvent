@@ -6,32 +6,54 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.mdproject.dicodingevent.R
+import com.mdproject.dicodingevent.data.response.ListEventsItem
 import com.mdproject.dicodingevent.databinding.FragmentUpcomingBinding
+import com.mdproject.dicodingevent.ui.EventsAdapter
 
 class UpcomingFragment : Fragment() {
-    private var _binding: FragmentUpcomingBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
+    private var _binding: FragmentUpcomingBinding? = null
     private val binding get() = _binding!!
+    private val upcomingViewModel by viewModels<UpcomingViewModel>()
+
+    private lateinit var eventsAdapter: EventsAdapter
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val upcomingViewModel =
-            ViewModelProvider(this).get(UpcomingViewModel::class.java)
-
         _binding = FragmentUpcomingBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        return binding.root
+    }
 
-        val textView: TextView = binding.textUpcoming
-        upcomingViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setupRecyclerView()
+        setupObserver()
+    }
+
+    private fun setupRecyclerView() {
+        eventsAdapter = EventsAdapter { selectedEvent ->
+            val action = UpcomingFragmentDirections.actionNavigationUpcomingToDetailEventFragment(selectedEvent)
+            findNavController().navigate(action)
         }
-        return root
+        binding.rvUpcomingEvent.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = eventsAdapter
+        }
+    }
+
+    private fun setupObserver() {
+        upcomingViewModel.listEvents.observe(viewLifecycleOwner,) { eventsAdapter.submitList(it) }
+        upcomingViewModel.isLoading.observe(viewLifecycleOwner) { binding.upcomingLoading.visibility = if (it) View.VISIBLE else View.GONE }
     }
 
     override fun onDestroyView() {
@@ -39,3 +61,5 @@ class UpcomingFragment : Fragment() {
         _binding = null
     }
 }
+
+
