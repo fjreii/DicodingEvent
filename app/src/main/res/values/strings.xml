@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Dicoding Event</string>
+    <string name="title_home">Home</string>
+    <string name="title_finished">Finished</string>
+    <string name="title_upcoming">Upcoming</string>
+    <string name="title_event">Judul Event</string>
+    <string name="event_description">Deskripsi Event</string>
+    <string name="event_type">Jenis Event</string>
+    <string name="event_status">Status Event</string>
+    <string name="header_upcoming">Event Akan Datang</string>
+    <string name="header_finished">Event Selesai</string>
+    <string name="photo_desc">Event Photo</string>
+    <string name="organizer_event">Penyelenggara</string>
+    <string name="quota_event">Kapasitas\n</string>
+    <string name="time_event">Waktu Pelaksanaan</string>
+    <string name="btn_register">Daftar</string>
+    <string name="event_detail">Detail Event</string>
+    <string name="title_result_search">Event:</string>
+    <string name="search_hint">Cari Event..</string>
+    <string name="search">Pencarian</string>
+    <string name="no_results_found">Event Tidak Ditemukan!</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
