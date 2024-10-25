@@ -10,37 +10,44 @@ import com.mdproject.dicodingevent.data.retrofit.ApiConfig
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class FinishedViewModel : ViewModel() {
 
     private val _listEvents = MutableLiveData<List<ListEventsItem>>()
-    val listEvents: LiveData<List<ListEventsItem>> get() = _listEvents
+    val listEvents: LiveData<List<ListEventsItem>> = _listEvents
 
     private val _isLoading = MutableLiveData<Boolean>()
-    val isLoading: LiveData<Boolean> get() = _isLoading
+    val isLoading: LiveData<Boolean> = _isLoading
 
-    init {
-        getEvents()
+    companion object {
+        private const val TAG = "FinishedViewModel"
+        private const val DATE_FORMAT = "yyyy-MM-dd HH:mm:ss"
     }
 
-    private fun getEvents() {
+    init {
+        getFinishedEvents()
+    }
+
+    private fun getFinishedEvents() {
         _isLoading.value = true
-        val call = ApiConfig.getApiService().getFinishedEvents()
-        call.enqueue(object : Callback<EventResponse> {
+        ApiConfig.getApiService().getFinishedEvents().enqueue(object : Callback<EventResponse> {
             override fun onResponse(call: Call<EventResponse>, response: Response<EventResponse>) {
+                _isLoading.value = false
                 if (response.isSuccessful) {
-                    val eventResponse = response.body()
-                    eventResponse?.let {
-                        // Process the list of events here
-                        Log.d("MainActivity", "Event list: ${it.listEvents}")
+                    val finishedEvents = response.body()?.listEvents?.filter { event ->
+                        LocalDateTime.now().isAfter(LocalDateTime.parse(event.endTime, DateTimeFormatter.ofPattern(DATE_FORMAT)))
                     }
+                    _listEvents.value = finishedEvents ?: emptyList()
                 } else {
-                    Log.e("MainActivity", "API call failed with response code: ${response.code()}")
+                    Log.e(TAG, "onFailure: ${response.message()}")
                 }
             }
 
             override fun onFailure(call: Call<EventResponse>, t: Throwable) {
-                Log.e("MainActivity", "API call failed: ${t.message}")
+                _isLoading.value = false
+                Log.e(TAG, "onFailure: ${t.message}")
             }
         })
     }

@@ -44,15 +44,15 @@ class SearchAdapter(private val onItemClicked: (ListEventsItem) -> Unit) : ListA
             val endDateTime = LocalDateTime.parse(event.endTime, formatter)
 
             return when {
-                currentTime.isAfter(endDateTime) -> "Completed"
+                currentTime.isAfter(endDateTime) -> "Selesai"
                 currentTime.isBefore(beginDateTime) -> {
                     val timeUntilStart = java.time.Duration.between(currentTime, beginDateTime)
                     when {
-                        timeUntilStart.toHours() <= 24 -> "${timeUntilStart.toHours()} Hour(s) Left"
-                        else -> "${timeUntilStart.toDays()} Day(s) Left"
+                        timeUntilStart.toHours() <= 24 -> "${timeUntilStart.toHours()} Jam Lagi"
+                        else -> "${timeUntilStart.toDays()} Hari Lagi"
                     }
                 }
-                else -> "Ongoing"
+                else -> "Sedang Berlangsung"
             }
         }
     }

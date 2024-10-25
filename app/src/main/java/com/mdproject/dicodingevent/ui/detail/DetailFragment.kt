@@ -15,7 +15,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
-import com.mdproject.dicodingevent.R
 import com.mdproject.dicodingevent.data.response.ListEventsItem
 import com.mdproject.dicodingevent.databinding.FragmentDetailBinding
 import java.time.LocalDateTime

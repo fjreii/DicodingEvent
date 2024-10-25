@@ -5,13 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.mdproject.dicodingevent.R
-import com.mdproject.dicodingevent.data.response.ListEventsItem
 import com.mdproject.dicodingevent.databinding.FragmentUpcomingBinding
 import com.mdproject.dicodingevent.ui.EventsAdapter
 
@@ -54,6 +51,12 @@ class UpcomingFragment : Fragment() {
     private fun setupObserver() {
         upcomingViewModel.listEvents.observe(viewLifecycleOwner) { eventsAdapter.submitList(it) }
         upcomingViewModel.isLoading.observe(viewLifecycleOwner) { binding.upcomingLoading.visibility = if (it) View.VISIBLE else View.GONE }
+        upcomingViewModel.errorMessage.observe(viewLifecycleOwner) {errorMessage ->
+            errorMessage?.let { showError(it) }}
+    }
+
+    private fun showError(errorMessage: String) {
+        Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {

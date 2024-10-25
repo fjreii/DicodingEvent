@@ -1,16 +1,11 @@
 package com.mdproject.dicodingevent.ui
 
-import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.mdproject.dicodingevent.R
 import com.mdproject.dicodingevent.data.response.ListEventsItem
 import com.mdproject.dicodingevent.databinding.ItemEventBinding
 import java.time.LocalDateTime
@@ -48,14 +43,14 @@ class EventsAdapter(private val onItemClicked: (ListEventsItem) -> Unit) : ListA
             val endDateTime = LocalDateTime.parse(event.endTime, formatter)
 
             return when {
-                currentTime.isAfter(endDateTime) -> "Completed"
+                currentTime.isAfter(endDateTime) -> "Selesai"
                 currentTime.isBefore(beginDateTime) -> {
                     val timeUntilStart = java.time.Duration.between(currentTime, beginDateTime)
-                    if (timeUntilStart.toHours() <= 24) "${timeUntilStart.toHours()} Hour Left"
-                    else "${timeUntilStart.toDays()} Day Left"
+                    if (timeUntilStart.toHours() <= 24) "${timeUntilStart.toHours()} Jam Lagi"
+                    else "${timeUntilStart.toDays()} Hari Lagi"
                 }
-                currentTime.isAfter(beginDateTime) && currentTime.isBefore(endDateTime) -> "Ongoing"
-                else -> "Canceled"
+                currentTime.isAfter(beginDateTime) && currentTime.isBefore(endDateTime) -> "Sedang Berlangsung"
+                else -> "Dibatalkan"
             }
         }
     }

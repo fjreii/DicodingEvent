@@ -4,10 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mdproject.dicodingevent.databinding.FragmentFinishedBinding
@@ -18,40 +16,33 @@ class FinishedFragment : Fragment() {
     private var _binding: FragmentFinishedBinding? = null
     private val binding get() = _binding!!
     private val finishedViewModel by viewModels<FinishedViewModel>()
+    private lateinit var eventAdapter: EventsAdapter
 
-    private lateinit var eventsAdapter: EventsAdapter
-
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentFinishedBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        setupRecyclerView()
+        initRecyclerView()
         observeViewModel()
     }
 
-    private fun setupRecyclerView() {
-        eventsAdapter = EventsAdapter { selectedEvent ->
+    private fun initRecyclerView() {
+        eventAdapter = EventsAdapter { selectedEvent ->
             val action = FinishedFragmentDirections.actionNavigationFinishedToDetailEventFragment(selectedEvent)
             findNavController().navigate(action)
         }
         binding.rvFinishedEvent.apply {
             layoutManager = LinearLayoutManager(context)
-            adapter = eventsAdapter
+            adapter = eventAdapter
         }
     }
 
     private fun observeViewModel() {
         finishedViewModel.listEvents.observe(viewLifecycleOwner) { events ->
-            eventsAdapter.submitList(events)
+            eventAdapter.submitList(events)
         }
         finishedViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             binding.finishedLoading.visibility = if (isLoading) View.VISIBLE else View.GONE

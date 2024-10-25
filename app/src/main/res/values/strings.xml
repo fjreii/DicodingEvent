@@ -17,7 +17,7 @@
     <string name="event_detail">Detail Event</string>
     <string name="title_result_search">Event:</string>
     <string name="search_hint">Cari Event..</string>
-    <string name="search">Pencarian</string>
+    <string name="title_search">Search</string>
     <string name="no_results_found">Event Tidak Ditemukan!</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
