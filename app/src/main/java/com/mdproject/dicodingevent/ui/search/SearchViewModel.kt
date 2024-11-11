@@ -23,25 +23,25 @@ class SearchViewModel : ViewModel() {
         private const val TAG = "SearchViewModel"
     }
 
-    fun searchEvent(keyword: String) {
-        _isLoading.value = true
-        ApiConfig.getApiService().searchEvents(keyword).enqueue(object : Callback<EventResponse> {
-            override fun onResponse(call: Call<EventResponse>, response: Response<EventResponse>) {
-                _isLoading.value = false
-                if (response.isSuccessful) {
-                    response.body()?.listEvents?.let { events ->
-                        _listEvents.value = events
-                        Log.d(TAG, "Results received: $events")
-                    }
-                } else {
-                    Log.e(TAG, "Response failure: ${response.message()}")
-                }
-            }
-
-            override fun onFailure(call: Call<EventResponse>, t: Throwable) {
-                _isLoading.value = false
-                Log.e(TAG, "Network failure: ${t.message}")
-            }
-        })
-    }
+//    fun searchEvent(keyword: String) {
+//        _isLoading.value = true
+//        ApiConfig.getApiService().searchEvents(keyword).enqueue(object : Callback<EventResponse> {
+//            override fun onResponse(call: Call<EventResponse>, response: Response<EventResponse>) {
+//                _isLoading.value = false
+//                if (response.isSuccessful) {
+//                    response.body()?.listEvents?.let { events ->
+//                        _listEvents.value = events
+//                        Log.d(TAG, "Results received: $events")
+//                    }
+//                } else {
+//                    Log.e(TAG, "Response failure: ${response.message()}")
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<EventResponse>, t: Throwable) {
+//                _isLoading.value = false
+//                Log.e(TAG, "Network failure: ${t.message}")
+//            }
+//        })
+//    }
 }

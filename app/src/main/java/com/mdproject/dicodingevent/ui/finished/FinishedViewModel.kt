@@ -21,11 +21,6 @@ class FinishedViewModel : ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    companion object {
-        private const val TAG = "FinishedViewModel"
-        private const val DATE_FORMAT = "yyyy-MM-dd HH:mm:ss"
-    }
-
     init {
         getFinishedEvents()
     }
@@ -50,5 +45,9 @@ class FinishedViewModel : ViewModel() {
                 Log.e(TAG, "onFailure: ${t.message}")
             }
         })
+    }
+    companion object {
+        private const val TAG = "FinishedViewModel"
+        private const val DATE_FORMAT = "yyyy-MM-dd HH:mm:ss"
     }
 }

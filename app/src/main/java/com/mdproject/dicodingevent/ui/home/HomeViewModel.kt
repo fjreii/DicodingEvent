@@ -28,48 +28,48 @@ class HomeViewModel : ViewModel() {
             private const val TAG = "HomeViewModel"
         }
 
-        init {
-            fetchEvents()
-        }
+//        init {
+//            fetchEvents()
+//        }
 
-        private fun fetchEvents() {
-            _isLoading.value = true
-            val client = ApiConfig.getApiService().getEvents()
-
-            client.enqueue(object : Callback<EventResponse> {
-                override fun onResponse(call: Call<EventResponse>, response: Response<EventResponse>) {
-                    _isLoading.value = false
-                    if (response.isSuccessful) {
-                        response.body()?.let { eventResponse ->
-                            categorizeEvents(eventResponse.listEvents)
-                        } ?: Log.e(TAG, "Response body is null")
-                    } else {
-                        Log.e(TAG, "Error: ${response.message()}")
-                    }
-                }
-
-                override fun onFailure(call: Call<EventResponse>, t: Throwable) {
-                    _isLoading.value = false
-                    Log.e(TAG, "Network call failed: ${t.message}")
-                }
-            })
-        }
-
-        private fun categorizeEvents(events: List<ListEventsItem>) {
-            val currentTime = LocalDateTime.now()
-            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-
-            val finishedEvents = events.filter { event ->
-                val endDateTime = LocalDateTime.parse(event.endTime, formatter)
-                currentTime.isAfter(endDateTime)
-            }.take(5)
-
-            val upcomingEvents = events.filter { event ->
-                val endDateTime = LocalDateTime.parse(event.endTime, formatter)
-                currentTime.isBefore(endDateTime)
-            }.take(5)
-
-            _listUpcomingEvents.value = upcomingEvents
-            _listFinishedEvents.value = finishedEvents
-        }
+//        private suspend fun fetchEvents() {
+//            _isLoading.value = true
+//            val client = ApiConfig.getApiService().getEvents()
+//
+//            client.enqueue(object : Callback<EventResponse> {
+//                override fun onResponse(call: Call<EventResponse>, response: Response<EventResponse>) {
+//                    _isLoading.value = false
+//                    if (response.isSuccessful) {
+//                        response.body()?.let { eventResponse ->
+//                            categorizeEvents(eventResponse.listEvents)
+//                        } ?: Log.e(TAG, "Response body is null")
+//                    } else {
+//                        Log.e(TAG, "Error: ${response.message()}")
+//                    }
+//                }
+//
+//                override fun onFailure(call: Call<EventResponse>, t: Throwable) {
+//                    _isLoading.value = false
+//                    Log.e(TAG, "Network call failed: ${t.message}")
+//                }
+//            })
+//        }
+//
+//        private fun categorizeEvents(events: List<ListEventsItem>) {
+//            val currentTime = LocalDateTime.now()
+//            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+//
+//            val finishedEvents = events.filter { event ->
+//                val endDateTime = LocalDateTime.parse(event.endTime, formatter)
+//                currentTime.isAfter(endDateTime)
+//            }.take(5)
+//
+//            val upcomingEvents = events.filter { event ->
+//                val endDateTime = LocalDateTime.parse(event.endTime, formatter)
+//                currentTime.isBefore(endDateTime)
+//            }.take(5)
+//
+//            _listUpcomingEvents.value = upcomingEvents
+//            _listFinishedEvents.value = finishedEvents
+//        }
 }

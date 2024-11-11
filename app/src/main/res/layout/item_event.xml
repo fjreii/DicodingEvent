@@ -15,7 +15,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="12dp">
+        android:padding="4dp">
 
         <ImageView
             android:id="@+id/iv_event"
@@ -60,7 +60,7 @@
             tools:text="@string/event_type" />
 
         <TextView
-            android:id="@+id/tv_event_status"
+            android:id="@+id/tv_event_summary"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
@@ -73,7 +73,7 @@
             card_view:layout_constraintHorizontal_bias="0.888"
             card_view:layout_constraintStart_toStartOf="@+id/tv_event_type"
             card_view:layout_constraintTop_toBottomOf="@+id/tv_event_type"
-            tools:text="@string/event_status" />
+            tools:text="@string/event_summary" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -7,20 +7,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mdproject.dicodingevent.R
+import com.mdproject.dicodingevent.data.local.entity.EventEntity
 import com.mdproject.dicodingevent.data.response.ListEventsItem
 import com.mdproject.dicodingevent.databinding.FragmentSearchBinding
+import com.mdproject.dicodingevent.ui.MainViewModel
 import com.mdproject.dicodingevent.ui.SearchAdapter
+import com.mdproject.dicodingevent.ui.ViewModelFactory
+import com.mdproject.dicodingevent.utils.Result
 
 @SuppressLint("SetTextI18n")
 class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
-    private val searchViewModel by viewModels<SearchViewModel>()
+    private val searchViewModel by viewModels<MainViewModel> { ViewModelFactory.getInstance(requireActivity()) }
     private val adapter by lazy { SearchAdapter { navigateToDetail(it) } }
 
     override fun onCreateView(
@@ -36,7 +41,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
         setupSearchBar()
-        observeViewModel()
+//        observeViewModel()
     }
 
     private fun setupRecyclerView() {
@@ -48,30 +53,37 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private fun setupSearchBar() {
         binding.searchBarEvent.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String): Boolean {
-                performSearch(query)
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let { performSearch(it) }
                 return true
             }
 
-            override fun onQueryTextChange(newText: String): Boolean {
-                performSearch(newText)
+            override fun onQueryTextChange(newText: String?): Boolean {
+                newText?.let { performSearch(it) }
                 return true
             }
         })
     }
 
     private fun performSearch(query: String) {
-        searchViewModel.searchEvent(query)
+        searchViewModel.searchEvent(query).observe(viewLifecycleOwner, ::handleSearchResult)
     }
 
-    private fun observeViewModel() {
-        searchViewModel.apply {
-            isLoading.observe(viewLifecycleOwner, ::showLoading)
-            listEvents.observe(viewLifecycleOwner, ::handleEventList)
+    private fun handleSearchResult(result: Result<List<EventEntity>>) {
+        when (result) {
+            is Result.Loading -> showLoading(true)
+            is Result.Success -> {
+                showLoading(false)
+                handleEventList(result.data)
+            }
+            is Result.Error -> {
+                showLoading(false)
+                showError(result.error)
+            }
         }
     }
 
-    private fun handleEventList(events: List<ListEventsItem>?) {
+    private fun handleEventList(events: List<EventEntity>) {
         if (events.isNullOrEmpty()) {
             showEmptyResult()
         } else {
@@ -80,7 +92,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
     }
 
-    private fun setEventData(events: List<ListEventsItem>) {
+    private fun setEventData(events: List<EventEntity>) {
         adapter.submitList(events)
     }
 
@@ -106,7 +118,11 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
     }
 
-    private fun navigateToDetail(selectedEvent: ListEventsItem) {
+    private fun showError(errorMessage: String) {
+        Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun navigateToDetail(selectedEvent: EventEntity) {
         val action = SearchFragmentDirections.actionNavigationSearchToDetailEventFragment(selectedEvent)
         findNavController().navigate(action)
     }

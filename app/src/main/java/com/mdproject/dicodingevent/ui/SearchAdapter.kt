@@ -1,17 +1,19 @@
 package com.mdproject.dicodingevent.ui
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.mdproject.dicodingevent.data.local.entity.EventEntity
 import com.mdproject.dicodingevent.data.response.ListEventsItem
 import com.mdproject.dicodingevent.databinding.ItemEventBinding
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class SearchAdapter(private val onItemClicked: (ListEventsItem) -> Unit) : ListAdapter<ListEventsItem, SearchAdapter.MyViewHolder>(DIFF_CALLBACK) {
+class SearchAdapter(private val onItemClicked: (EventEntity) -> Unit) : ListAdapter<EventEntity, SearchAdapter.MyViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val binding = ItemEventBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -24,10 +26,12 @@ class SearchAdapter(private val onItemClicked: (ListEventsItem) -> Unit) : ListA
     }
 
     class MyViewHolder(private val binding: ItemEventBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(event: ListEventsItem, onItemClicked: (ListEventsItem) -> Unit) {
+        fun bind(event: EventEntity, onItemClicked: (EventEntity) -> Unit) {
             binding.tvEventName.text = event.name
             binding.tvEventType.text = event.category
-            binding.tvEventStatus.text = getEventStatus(event)
+            binding.tvEventSummary.text = event.summary
+
+//            binding.tvEventStatus.text = getEventStatus(event)
 
             Glide.with(binding.root.context)
                 .load(event.imageLogo)
@@ -37,7 +41,7 @@ class SearchAdapter(private val onItemClicked: (ListEventsItem) -> Unit) : ListA
         }
 
 
-        private fun getEventStatus(event: ListEventsItem): String {
+        private fun getEventStatus(event: EventEntity): String {
             val currentTime = LocalDateTime.now()
             val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
             val beginDateTime = LocalDateTime.parse(event.beginTime, formatter)
@@ -58,12 +62,13 @@ class SearchAdapter(private val onItemClicked: (ListEventsItem) -> Unit) : ListA
     }
 
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListEventsItem>() {
-            override fun areItemsTheSame(oldItem: ListEventsItem, newItem: ListEventsItem): Boolean {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<EventEntity>() {
+            override fun areItemsTheSame(oldItem: EventEntity, newItem: EventEntity): Boolean {
                 return oldItem.id == newItem.id
             }
 
-            override fun areContentsTheSame(oldItem: ListEventsItem, newItem: ListEventsItem): Boolean {
+            @SuppressLint("DiffUtilEquals")
+            override fun areContentsTheSame(oldItem: EventEntity, newItem: EventEntity): Boolean {
                 return oldItem == newItem
             }
         }
