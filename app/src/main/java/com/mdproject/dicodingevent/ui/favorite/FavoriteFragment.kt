@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.mdproject.dicodingevent.R
 import com.mdproject.dicodingevent.databinding.FragmentFavoriteBinding
 import com.mdproject.dicodingevent.ui.EventsAdapter
 import com.mdproject.dicodingevent.ui.MainViewModel
@@ -24,23 +24,27 @@ class FavoriteFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupRecyclerView()
+        observeFavorites()
+    }
+
+    private fun setupRecyclerView() {
+        adapter = EventsAdapter{ selectedEvent ->
+            val action = FavoriteFragmentDirections.actionNavigationFavoriteToDetailEventFragment(selectedEvent)
+            findNavController().navigate(action)
+        }
         binding.rvFavoriteEvent.apply {
-            adapter = this@FavoriteFragment.adapter
             layoutManager = LinearLayoutManager(context)
             setHasFixedSize(true)
+            adapter = this@FavoriteFragment.adapter
         }
-        observeFavorites()
     }
 
     private fun observeFavorites() {
         favoriteViewModel.getFavoriteEvent().observe(viewLifecycleOwner) { favEvent ->
-            binding.apply {
-                favoriteLoading.visibility = View.GONE
-//                favoriteCount.text = "Total: ${favEvent.size} Event"
-                rvFavoriteEvent.visibility = if (favEvent.isEmpty()) View.GONE else View.VISIBLE
-//                favoriteCount.visibility = favorite.visibility
-                adapter.submitList(favEvent)
-            }
+            binding.favoriteLoading.visibility = View.GONE
+            binding.rvFavoriteEvent.visibility = if (favEvent.isEmpty()) View.GONE else View.VISIBLE
+            adapter.submitList(favEvent)
         }
     }
 
@@ -48,6 +52,4 @@ class FavoriteFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
-
 }

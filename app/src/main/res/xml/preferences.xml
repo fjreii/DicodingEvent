@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.prefrerence.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:iconSpaceReserved="false">
+<androidx.preference.PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
         android:layout_marginStart="16dp"
@@ -11,8 +10,7 @@
             android:defaultValue="false"
             android:key="keyDark"
             android:title="@string/pref_dark"
-            android:summary="Enable/disable dark mode"
-            app:iconSpaceReserved="false"/>
+            android:summary="Enable/Turn off dark mode" />
 
     </PreferenceCategory>
 
@@ -24,9 +22,8 @@
             android:defaultValue="false"
             android:key="keyReminder"
             android:title="@string/pref_reminder"
-            android:summary="Set reminder for nearest Event date"
-            app:iconSpaceReserved="false"/>
+            android:summary="Set notification for nearest Event date" />
+
     </PreferenceCategory>
 
-
-</androidx.prefrerence.PreferenceScreen>
+</androidx.preference.PreferenceScreen>

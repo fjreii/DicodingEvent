@@ -68,16 +68,9 @@ class UpcomingFragment : Fragment() {
                     Toast.makeText(context, "Error: ${events.error}", Toast.LENGTH_SHORT).show()
                 }
             }
-//        upcomingViewModel.listEvents.observe(viewLifecycleOwner) { eventsAdapter.submitList(it) }
-//        upcomingViewModel.isLoading.observe(viewLifecycleOwner) { binding.upcomingLoading.visibility = if (it) View.VISIBLE else View.GONE }
-//        upcomingViewModel.errorMessage.observe(viewLifecycleOwner) {errorMessage ->
-//            errorMessage?.let { showError(it) }}
         }
 
     }
-//    private fun showError(errorMessage: String) {
-//        Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
-//    }
 
     override fun onDestroyView() {
         super.onDestroyView()

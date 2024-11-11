@@ -80,7 +80,6 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.search -> {
-                // Navigate to SearchFragment
                 findNavController(R.id.nav_host_fragment).navigate(R.id.navigation_search)
                 true
             }

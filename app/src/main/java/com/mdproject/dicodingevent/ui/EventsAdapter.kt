@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.mdproject.dicodingevent.data.local.entity.EventEntity
-import com.mdproject.dicodingevent.data.response.ListEventsItem
 import com.mdproject.dicodingevent.databinding.ItemEventBinding
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -39,23 +38,23 @@ class EventsAdapter(private val onItemClicked: (EventEntity) -> Unit) : ListAdap
             binding.root.setOnClickListener { onItemClicked(event) }
         }
 
-        private fun getEventStatus(event: ListEventsItem): String {
-            val currentTime = LocalDateTime.now()
-            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-            val beginDateTime = LocalDateTime.parse(event.beginTime, formatter)
-            val endDateTime = LocalDateTime.parse(event.endTime, formatter)
-
-            return when {
-                currentTime.isAfter(endDateTime) -> "Selesai"
-                currentTime.isBefore(beginDateTime) -> {
-                    val timeUntilStart = java.time.Duration.between(currentTime, beginDateTime)
-                    if (timeUntilStart.toHours() <= 24) "${timeUntilStart.toHours()} Jam Lagi"
-                    else "${timeUntilStart.toDays()} Hari Lagi"
-                }
-                currentTime.isAfter(beginDateTime) && currentTime.isBefore(endDateTime) -> "Sedang Berlangsung"
-                else -> "Dibatalkan"
-            }
-        }
+//        private fun getEventStatus(event: ListEventsItem): String {
+//            val currentTime = LocalDateTime.now()
+//            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+//            val beginDateTime = LocalDateTime.parse(event.beginTime, formatter)
+//            val endDateTime = LocalDateTime.parse(event.endTime, formatter)
+//
+//            return when {
+//                currentTime.isAfter(endDateTime) -> "Selesai"
+//                currentTime.isBefore(beginDateTime) -> {
+//                    val timeUntilStart = java.time.Duration.between(currentTime, beginDateTime)
+//                    if (timeUntilStart.toHours() <= 24) "${timeUntilStart.toHours()} Jam Lagi"
+//                    else "${timeUntilStart.toDays()} Hari Lagi"
+//                }
+//                currentTime.isAfter(beginDateTime) && currentTime.isBefore(endDateTime) -> "Sedang Berlangsung"
+//                else -> "Dibatalkan"
+//            }
+//        }
     }
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<EventEntity>() {

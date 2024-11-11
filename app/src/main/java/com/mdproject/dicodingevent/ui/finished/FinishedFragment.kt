@@ -69,13 +69,6 @@ class FinishedFragment : Fragment() {
                     Toast.makeText(context, "Error: ${events.error}", Toast.LENGTH_SHORT).show()
                 }
             }
-
-//        finishedViewModel.listEvents.observe(viewLifecycleOwner) { events ->
-//            eventAdapter.submitList(events)
-//        }
-//        finishedViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-//            binding.finishedLoading.visibility = if (isLoading) View.VISIBLE else View.GONE
-//        }
         }
     }
     override fun onDestroyView() {
